@@ -47,12 +47,6 @@ namespace 會計過帳
 
         public Form()
         {
-
-            foreach (var process in Process.GetProcessesByName("excel"))
-            {
-                process.Kill();
-            }
-
             InitializeComponent();
 
             initComboBox();
@@ -64,10 +58,7 @@ namespace 會計過帳
 
         public void Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (xlApp != null)
-            {
-                xlApp.Quit();
-            }
+            xlApp.Quit();
 
             foreach (Process clsProcess in Process.GetProcesses())
             {
@@ -909,7 +900,7 @@ namespace 會計過帳
                     continue;
                 }
 
-                string account = currentRange.Value2.ToString().Trim();
+                string account = xlRange.Cells[i, 2].Value2.ToString();
 
                 if (string.IsNullOrEmpty(account))
                 {
@@ -1050,17 +1041,17 @@ namespace 會計過帳
                     break;
                 }
 
-                if (key.Contains(accountName) || accountName.Contains(key))
-                {
-                    accountKey = key;
+                //if (key.Contains(accountName) || accountName.Contains(key))
+                //{
+                //    accountKey = key;
 
-                    if (accountName.Contains(key))//現在map存的key比較短  要跟換為長的
-                    {
-                        isNeedUpdateKey = true;
-                    }
+                //    if (accountName.Contains(key))//現在map存的key比較短  要跟換為長的
+                //    {
+                //        isNeedUpdateKey = true;
+                //    }
 
-                    break;
-                }
+                //    break;
+                //}
             }
 
             return accountKey;
@@ -1149,6 +1140,14 @@ namespace 會計過帳
                 {
                     //借方
                     ParseCell(assetMap, liabMap, xlRange, i, true);
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+                try
+                {
                     //貸方
                     ParseCell(assetMap, liabMap, xlRange, i, false);
 
@@ -1172,6 +1171,14 @@ namespace 會計過帳
                 {
                     //借方
                     ParseCell(assetMap, liabMap, xlRange, i, true);
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+                try
+                {
                     //貸方
                     ParseCell(assetMap, liabMap, xlRange, i, false);
 
