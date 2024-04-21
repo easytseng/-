@@ -607,7 +607,7 @@ namespace 會計過帳
                 {
                     continue;
                 }
-                string account = currentRange.Value2.ToString().Trim();
+                string account = parseAccount(currentRange.Value2.ToString());
 
                 if (!"代付款".Equals(account) && !accountList.Contains(account))
                 {
@@ -631,7 +631,7 @@ namespace 會計過帳
                 {
                     continue;
                 }
-                string account = currentRange.Value2.ToString().Trim();
+                string account = parseAccount(currentRange.Value2.ToString());
 
                 if (!"代付款".Equals(account) && !accountList.Contains(account))
                 {
@@ -715,7 +715,7 @@ namespace 會計過帳
                         continue;
                     }
 
-                    string account = currentRange.Value2.ToString().Replace(" ", "");
+                    string account = parseAccount(currentRange.Value2.ToString());
 
                     currentRange = (Range)xlRange.Cells[i, 2];
                     if (currentRange.Value2 == null)
@@ -735,7 +735,7 @@ namespace 會計過帳
                         continue;
                     }
 
-                    account = currentRange.Value2.ToString().Replace(" ", "");
+                    account = parseAccount(currentRange.Value2.ToString());
 
                     if (!string.IsNullOrEmpty(account))
                     {
@@ -773,7 +773,7 @@ namespace 會計過帳
                 {
                     double income = Convert.ToDouble(target.Value2);
                     target = target.Cells.Offset[0, -1];
-                    string account = target.Value2.ToString();
+                    string account = parseAccount(target.Value2.ToString());
 
                     if (incomeAccountList.Contains(account))
                     {
@@ -900,14 +900,12 @@ namespace 會計過帳
                     continue;
                 }
 
-                string account = xlRange.Cells[i, 2].Value2.ToString();
+                string account = parseAccount(xlRange.Cells[i, 2].Value2.ToString());
 
                 if (string.IsNullOrEmpty(account))
                 {
                     continue;
                 }
-
-                account = account.Replace(" ", "");
 
                 Boolean isNeedUpdateKey = false;
                 string accountKey = string.Empty;
@@ -1215,7 +1213,7 @@ namespace 會計過帳
                 return;
             }
 
-            string account = currentRange.Value2.ToString().Replace(" ", "");
+            string account = parseAccount(currentRange.Value2.ToString());
             if (!drVoucherAccountList.Contains(account) && !crVoucherAccountList.Contains(account))
             {
                 return;
@@ -1229,7 +1227,7 @@ namespace 會計過帳
                     return;
                 }
 
-                account = currentRange.Value2.ToString().Replace(" ", "");
+                account = parseAccount(currentRange.Value2.ToString());
 
                 Boolean isNeedUpdateKey = false;
                 string accountKey = checkMap(assetMap, account, out isNeedUpdateKey);
@@ -1372,6 +1370,14 @@ namespace 會計過帳
                 rowIndex++;
             }
 
+        }
+
+        public string parseAccount(string orgStr)
+        {
+            string newStr = orgStr.Trim();
+            newStr = newStr.Replace(" ", "");
+            newStr = Regex.Replace(newStr, @"\u00a0", "");
+            return newStr;
         }
 
 
